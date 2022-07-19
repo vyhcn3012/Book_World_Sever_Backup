@@ -1,0 +1,76 @@
+
+  <body>
+    
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Thêm</h4>
+                    <p class="card-description"> Form thêm mới </p>
+                   <form role="form" action="/cpanel/{{datas._id}}/edit" method="post" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-12">
+                  <label for="inputName5" class="form-label">Tên sản phẩm</label>
+                  <input  name="name" value="{{datas.name}}" type="text" class="form-control" id="inputName5">
+                </div>
+                <div class="col-md-12">
+                  <label for="inputEmail5" class="form-label">permission</label>
+                  <input  name="permission" value="{{datas.permission}}" type="text" class="form-control" id="inputEmail5">
+                </div>
+                <div class="col-md-12">
+                  <label for="inputPassword5" class="form-label">image</label>
+                  <input name="image" value="{{datas.image}}" type="text" class="form-control" id="inputPassword5">
+                </div>
+                  <div class="col-md-12">
+                  <label for="inputName5" class="form-label">description</label>
+                  <input  name="description" value="{{datas.description}}" type="text" class="form-control" id="inputName5">
+                </div>
+                {{!-- <div class="col-12">
+                  <label for="inputAddress5" class="form-label">Hình ảnh</label>
+                  <input type="file" class="form-control" id="inputAddres5s" name="image">
+                  <img src="{{product.image}}" width="200" height="200">
+                </div> --}}
+                <div class="col-12">
+                  <label for="inputAddress2" class="form-label">linkPage</label>
+                  <textarea class="form-control" name="linkPage">{{datas.linkPage}}</textarea>
+                </div>           
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Save</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <select name="category_id" class="form-control">
+                      {{#each categories}}
+                      {{#if this.selected}}
+                        <option selected value="{{this._id}}">{{this.name}}</option>
+                        {{else}}
+                         <option value="{{this._id}}">{{this.name}}</option>
+                        {{/if}}
+                        {{/each}}
+                     
+                    </select>
+                </div>
+              </form><!-- End Multi Columns Form -->
+                  </div>
+                </div>
+              </div>
+             
+           
+          <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+              <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © vyhcn30122002</span>
+              <!-- <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span> -->
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+  
+    <!-- End custom js for this page -->
+  </body>
