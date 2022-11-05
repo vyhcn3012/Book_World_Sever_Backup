@@ -32,6 +32,19 @@ class BookService extends Service {
     }
   }
 
+  async createBook(body) {
+    try {
+        const item = await this.model.create(body);
+          if (item) {
+              return new HttpResponse(item);
+          }
+          throw new Error('Có lỗi, bạn có thể thử lại sau');
+      
+    } catch (error) {
+        throw new Error(error.message || 'Có lỗi, bạn có thể thử lại sau');
+    }
+  }
+
   async getComment(_id) {
     try {
       const response = await this.model.findById(_id);
@@ -48,14 +61,13 @@ class BookService extends Service {
 
     async getBookById(id) {
             try {
-                const book = await this.model.find({'account._id':id})  
+                const book = await this.model.find({'account':id})  
+
                 if (!book) {
                     const error = new Error('Không tìm thấy cuốn sách này');
                     error.statusCode = 404;
                     throw error;
                 }
-             
-                console.log(book);
                 return new HttpResponse( book);
             } catch (errors) {
                 throw errors;
@@ -70,12 +82,24 @@ class BookService extends Service {
                 error.statusCode = 404;
                 throw error;
             }
-         
-            console.log(book);
             return new HttpResponse( book);
         } catch (errors) {
             throw errors;
         }
+    }
+
+    async get(id){
+      try{
+        const book = await this.model.findById(id);
+        if(!book){
+          const error = new Error('Không tìm thấy cuốn sách này');
+          error.statusCode = 404;
+          throw error;
+        }
+        return book;
+      }catch(errors){
+        throw errors;
+      }
     }
     
     async cpanel_GetbyId(id) {

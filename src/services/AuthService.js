@@ -27,12 +27,13 @@ class AuthService {
                     createdBy: null,
                     updatedBy: null,
                     name, email, phone, permission, image, bookmark, wallet,
-                    favoritebooks
+                    favoritebooks,
+                    typeLogin:"email"
                 }
                 account = await this.register(data);
             }
 
-            console.log("=====>", account.fcmtokens);
+            // console.log("=====>", account.fcmtokens);
             
             if(token_fcm) {
                 let checkFCM = account.fcmtokens.filter(i => i == token_fcm)[0];
@@ -62,6 +63,35 @@ class AuthService {
             throw e;
         }
     }
+    async loginNumberphone(body){
+        try {
+            let response = await this.userService.loginNumberphone(body);
+            let account=response.data;
+            const { token_fcm } = body;
+            if(token_fcm) {
+                let checkFCM = account.fcmtokens.filter(i => i == token_fcm)[0];
+                if (!checkFCM && token_fcm){
+                    account.fcmtokens = [...account.fcmtokens, token_fcm];
+                    account.fcmtokens = account.fcmtokens.slice(Math.max(account.fcmtokens.lenght - 3, 0));
+                    await this.userService.update(account._id, {fcmtokens: account.fcmtokens});
+                }
+            }
+            let cacheUser = await this.userService.loginNumberphone(body);
+            cacheUser = cacheUser.data;
+            const token = await this.model.generateToken(cacheUser);
+            await this.model.create({ token, 'account': new mongoose.mongo.ObjectId(cacheUser._id) });
+            const tokenData = await this.model.findOne({ 'token': token });
+            const _tokenData = {
+                _id: tokenData._id,
+                token: tokenData.token,
+                account: cacheUser,
+            }
+            return new HttpResponse(_tokenData);
+        } catch (e) {
+            console.log('>>>>>>>>79 Auth service error: ', e);
+            throw e;
+        }
+    }
 
     async register(data) {
         try {
@@ -72,8 +102,6 @@ class AuthService {
     }
 
     async logout(token, fcmtoken, account) {
-        console.log("===> logout", token, fcmtoken, account);
-        console.log("====> account", account.fcmtokens);
         try {
             await this.model.deleteOne({ token });
             account.fcmtokens = account.fcmtokens?.filter(item => item != fcmtoken);
@@ -84,38 +112,41 @@ class AuthService {
         }
     }
 
-    async checkLogin(token) {
+    async checkLogin( token ) {
         try {
             // Check if the token is in the Database
-            const tokenInDB = await this.model.countDocuments({ token });
-            if (!tokenInDB) {
-                const error = new Error('Token không đúng');
+            const tokenInDB = await this.model.countDocuments( { token } );
+            console.log('tokendb',token)
+            if ( !tokenInDB ) {
+                const error = new Error( 'Invalid Token' );
 
                 error.statusCode = 401;
                 throw error;
             }
             // Check the token is a valid JWT
-            const account = await this.model.decodeToken(token);
-            if (!account) {
-                const error = new Error('Token không đúng');
+            const user = await this.model.decodeToken( token );
+            // console.log('user',user)
+
+            if ( !user ) {
+                const error = new Error( 'Invalid Token' );
 
                 error.statusCode = 401;
                 throw error;
             }
-            
             // Check the Extracted user is active in DB
-            let userFromDb = await this.userService.findInfoByEmail(account.email);
-            
-            if (userFromDb.data) {
+            const userFromDb = await this.userService.get( user._id );
+            // console.log('userFromDb',userFromDb)
+
+            if ( userFromDb.data ) {
                 return userFromDb.data;
             }
-            const error = new Error('Token không đúng');
+            const error = new Error( 'Invalid Token' );
 
             error.statusCode = 401;
             throw error;
-
-        } catch (e) {
-            const error = new Error('Token không đúng');
+            
+        } catch ( e ) {
+            const error = new Error( 'Invalid Token' );
 
             error.statusCode = 401;
             throw error;

@@ -25,6 +25,7 @@ class CommentService extends Service{
             throw errors;
         }
     }
+
 }
 
 module.exports = { CommentService };

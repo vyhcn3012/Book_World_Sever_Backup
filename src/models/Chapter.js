@@ -27,13 +27,13 @@ class Chapter {
                 'type': String,
                 'required': false,
             },
-            'linkSound': {
+            'linkAudio': {
                 'type': String,
                 'required': false,
             },
             'idComment': {
                 'type': Schema.Types.ObjectId,
-                'required': true,
+                'required': false,
                 'ref': 'comment'
             },
             'permission': {
@@ -48,6 +48,10 @@ class Chapter {
                 'type': Boolean,
                 'required': true,
                 'default': false,
+            },
+            'chapterNumber': {
+                'type': Number,
+                'required': false,
             },
         }, { 'timestamps': false } );
         schema.plugin(uniqueValidator);

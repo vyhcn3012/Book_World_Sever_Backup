@@ -26,7 +26,6 @@ class CommunityController extends Controller {
     async getAllCommunityOfUser(req, res, next) {
         try {
             const { account } = req.params;
-            console.log(account);
             const response = await this.service.getAll({limit:1000,account:account});
           
             await res.status(response.statusCode).json(response);

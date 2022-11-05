@@ -14,11 +14,25 @@ module.exports.getConfig = () => {
         'GOOGLE_REDIRECT_URL': `/cpanel/home/auth_callback`,
         'GOOGLE_SCOPE': ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email',],
         'EMAIL_GOOGLE_TESTING': 'book.world.duan1@gmail.com',
+        'CLOUDINARY_CLOUD_NAME': 'cao-ng-fpt-polytechnic',
+        'CLOUDINARY_API_KEY': '811123551641114',
+        'CLOUDINARY_API_SECRET': '6DMIjAlUUCS8tRoJrDNSd_yqqCg',
         'GMAIL_MAIL_DOMAIN': '@gmail.com',
         'USER_BOOK_STATUS': {
             'REGISTER': 1,
         },
-
+        'ROLE_USER': {
+            'USER': 1,
+            'AUTHOR': 2,
+            'MANAGER': 10,
+            'ADMIN': 99,
+            'SUPER_ADMIN': 100,
+        },
+        'AUTHOR_ACCOUNT_STATUS': {
+            'CLOSE': 1, // Tài khoản user
+            'PENDING': 2, // Tài khoản đang chờ duyệt
+            'ACTIVE': 3, // Tài khoản đã được duyệt
+        },
     }
 
     // Modify for Production

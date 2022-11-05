@@ -12,18 +12,9 @@ class Book {
                 'ref':'category'
             },
             'account': {
-                'type': [{
-                    '_id': {
-                        'type': Schema.Types.ObjectId,
-                        'required': false,
-                    },
-                    'permission': {
-                        'type': Number,
-                        'required': false,
-                    },
-                }],
+                'type': Schema.Types.ObjectId,
                 'required': false,
-                'ref':'account'
+                'ref': 'account'
             },
             'releasedDate': {
                 'type': Date,
@@ -43,7 +34,7 @@ class Book {
             },
             'overview': {
                 'type': String,
-                'required': true,
+                'required': false,
             },
             'numSumRead': {
                 'type': Number,
@@ -51,14 +42,13 @@ class Book {
             },
             'chapter': {
                 'type': Schema.Types.ObjectId,
-                'required': true,
+                'required': false,
                 'ref': 'chapter'
             },
             'isPrice': {
                 'type': Number,
                 'required': false,
             },
-           
         }, { 'timestamps': true } );
 
         schema.plugin( uniqueValidator );

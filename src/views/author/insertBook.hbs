@@ -1,0 +1,103 @@
+<body>
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h3 class="page-title"> Thêm&Cập nhật elements </h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Thêm&Cập nhật</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Thêm&Cập nhật elements</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="col-md-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Thêm</h4>
+                            <p class="card-description"> Form thêm mới </p>
+                            <form>
+                                <div class="form-group">
+                                    <label>Hình ảnh</label>
+                                    <input type="file" name="image" class="file-upload-default">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputUsername1">Tên sản phẩm</label>
+                                    <input name="name" type="text" class="form-control" id="name"
+                                        placeholder="Tên sản phẩm">
+                                </div>
+                                <div class="form-group">
+                                    <label>Danh mục</label>
+                                    <select name="categoryId" class="form-control" id="categoryId">
+                                        {{#each categories}}
+                                        <option value="{{this._id}}">{{this.name}}</option>
+                                        {{/each}}
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Giới thiệu</label>
+                                    <input class="form-control" type="text"
+                                        name="introduction" id="introduction" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputConfirmPassword1">Số tiền</label>
+                                    <input name="isPrice" id="isPrice" class="form-control" id="exampleInputConfirmPassword1"
+                                        placeholder="Số lượng">
+                                </div>
+                        <button id="buttonSave" onclick="onSave()" type="button"
+                            class="btn btn-primary">Lưu</button>
+                        <button class="btn btn-light">Bỏ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</body>
+<script>
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const onSave = async () => {
+
+        const image = document.getElementById('image');
+        const name = document.getElementById('name');
+        const introduction = document.getElementById('introduction');
+        const isPrice = document.getElementById('isPrice');
+        const categoryId = document.getElementById('categoryId');
+
+        console.log(introduction.value);
+            
+        swal("Xác nhận thêm mới ngành học?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+                const url = `/api/books/insertBook`;
+                const body = {
+                    image: 'test',
+                    name: name.value,
+                    introduction: introduction.value,
+                    isPrice: isPrice.value,
+                    categoryId: categoryId.value,
+                }
+
+                const option = {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+                try {
+                    const result = await fetchAPI(url, option);
+                    if(result.error == false) {
+                        window.location = '/';
+                    }
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+            })
+    }
+</script>

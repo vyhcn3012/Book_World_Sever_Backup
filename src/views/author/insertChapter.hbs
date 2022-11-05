@@ -1,0 +1,75 @@
+<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+<body>
+    <form>
+        <div class="form-group">
+            <label style="font-size: 15px; margin-left: 30px;" >Tên sách</label>
+            <input disabled style="width: 300px; height: 30px; font-size: 15px; margin-left: 15px;" type="idBook" name="idBook">
+        </div>
+        <div class="form-group">
+            <label style="font-size: 15px; margin-left: 30px;" >Tiêu đề</label>
+            <input style="width: 300px; height: 30px; font-size: 15px; margin-left: 21px;" type="title" name="title" class="file-upload-default">
+        </div>
+        <div class="form-group">
+            <label style="font-size: 15px; margin-left: 30px;">Chú thích</label>
+            <input style="width: 300px; height: 30px; font-size: 15px; margin-left: 10px;" type="permission" name="permission" class="file-upload-default">
+        </div>        
+    </form>
+     <div id="editor"></div>
+        <button id="buttonSave" onclick="onSave()" type="button"
+        class="btn btn-primary">Lưu</button>
+</body>
+<script>
+    let editorinstance;
+    const _book = {{{ _book }}};
+    const { name, _id } = _book;
+
+    const idBook = document.querySelector('input[name="idBook"]');
+    idBook.value = name;
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+    $(document).ready(function () {
+    // CKEDITORs 
+        var myeditor = ClassicEditor.create(document.querySelector('#editor'))
+        .then
+        (editor => { editorinstance =editor;})
+        .catch(error => { 
+            console.error(error); 
+        }); 
+    }); 
+    const onSave = async => {
+        const data = editorinstance.getData(); 
+        const title = document.querySelector('input[name="title"]').value;
+        const permission = document.querySelector('input[name="permission"]').value;
+        swal("Xác nhận thêm mới ngành học?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+                const url = `/api/chapters/insertChapterBook`;
+                const body = {
+                    idBook: _id,
+                    title: title,
+                    permission: permission,
+                    htmlChapter: data
+                }
+
+                const option = {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+                try {
+                    const result = await fetchAPI(url, option);
+                    if(result.error == false) {
+                        //window.location = '/';
+                    }
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+            })
+    }
+</script>

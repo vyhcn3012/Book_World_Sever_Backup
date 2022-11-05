@@ -3,7 +3,7 @@ const express = require( 'express' ), router = express.Router();
 
 
 router.get('/', CPanelController.index )
-router.post( '/auth', CPanelController.auth );
-router.get( '/auth_callback', CPanelController.auth_callback );
+router.post( '/', CPanelController.auth );
+router.get( '/auth_callback', CPanelController.callback );
 
 module.exports = router;

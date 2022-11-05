@@ -8,4 +8,6 @@ router.get('/', (req, res) => {
 });
 router.post('/postComment',CommentController.postComment);
 
+router.post('/getCommentChapters',CommentController.getCommentChapters);
+
 module.exports = router;

@@ -1,4 +1,4 @@
-var multer = require("multer");
+
 const autoBind = require('auto-bind');
 const { Controller } = require('../../system/controllers/Controller');
 const { MediaService } = require('../services/MediaService');
@@ -16,11 +16,10 @@ cloudinary.config({
 });
 const cloudinaryUpload = (file) => cloudinary.uploader.upload(file);
 
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage,
-});
-const singleUpload = upload.single("image");
+
+
+
+
 
 class MediaController extends Controller {
 
@@ -28,22 +27,21 @@ class MediaController extends Controller {
         super(service);
         autoBind(this);
     }
-    async singleUpload(){
-        return singleUpload;
-    }
 
     async createImage(req, res) {
       try {
         if (!req.file) {
           throw new Error("Image is not presented!");
         }
+       
         const file64 = formatBufferTo64(req.file);
         const uploadResult = await cloudinaryUpload(file64.content);
-    
-        return res.json({
+        const response = {
           cloudinaryId: uploadResult.public_id,
           url: uploadResult.secure_url,
-        });
+        };
+        await res.status(200).json(response);
+        
       } catch (e) {
         return res.status(422).send({ message: e.message });
       }
